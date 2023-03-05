@@ -43,7 +43,7 @@ const AdminPage: NextPage = () => {
                     className="btn-error btn"
                     type="button"
                     onClick={() => {
-                      toast
+                      void toast
                         .promise(
                           dismissApp({
                             id: app.id,
@@ -65,7 +65,7 @@ const AdminPage: NextPage = () => {
                     className="btn-primary btn"
                     type="button"
                     onClick={() => {
-                      toast
+                      void toast
                         .promise(
                           approveApp({
                             id: app.id,
