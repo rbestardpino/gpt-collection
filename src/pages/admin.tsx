@@ -1,5 +1,6 @@
 import { type NextPage } from "next";
 import { useSession } from "next-auth/react";
+import { toast } from "react-hot-toast";
 import AppLink from "~/components/AppLink";
 import Navbar from "~/components/Navbar";
 import { api } from "~/utils/api";
@@ -15,8 +16,9 @@ const AdminPage: NextPage = () => {
     enabled: sessionData?.user !== undefined,
   });
 
-  const { mutateAsync: approveApp, isLoading: isLoadingMutation } =
-    api.apps.approve.useMutation();
+  const { mutateAsync: approveApp } = api.apps.approve.useMutation();
+
+  const { mutateAsync: dismissApp } = api.apps.dismiss.useMutation();
 
   if (sessionData?.user?.role !== "ADMIN") {
     return <main>UNAUTHORIZED</main>;
@@ -38,16 +40,45 @@ const AdminPage: NextPage = () => {
                 <p>{app.description}</p>
                 <div className="card-actions justify-end">
                   <button
-                    className={
-                      "btn-primary btn" + (isLoadingMutation ? " loading" : "")
-                    }
+                    className="btn-error btn"
                     type="button"
                     onClick={() => {
-                      void approveApp({
-                        id: app.id,
-                      }).then(() => {
-                        void refetch();
-                      });
+                      toast
+                        .promise(
+                          dismissApp({
+                            id: app.id,
+                          }),
+                          {
+                            loading: `Dismissing "${app.name}"`,
+                            success: `Dismissed "${app.name}"`,
+                            error: `Error dismissing "${app.name}"`,
+                          }
+                        )
+                        .then(() => {
+                          void refetch();
+                        });
+                    }}
+                  >
+                    Dismiss
+                  </button>
+                  <button
+                    className="btn-primary btn"
+                    type="button"
+                    onClick={() => {
+                      toast
+                        .promise(
+                          approveApp({
+                            id: app.id,
+                          }),
+                          {
+                            loading: `Approving "${app.name}"`,
+                            success: `Approved "${app.name}"`,
+                            error: `Error approving "${app.name}"`,
+                          }
+                        )
+                        .then(() => {
+                          void refetch();
+                        });
                     }}
                   >
                     Approve
@@ -65,4 +96,3 @@ const AdminPage: NextPage = () => {
 export default AdminPage;
 
 // TODO: add an edit functionality
-// TODO: add a DISMISS functionality

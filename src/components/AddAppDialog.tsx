@@ -33,14 +33,13 @@ const CreateAppSchema = z.object({
 const AddAppButton = () => {
   const { mutateAsync: createApp, isLoading } = api.apps.create.useMutation();
 
-  const { reset } = useForm<z.infer<typeof CreateAppSchema>>();
+  const form = useForm<z.infer<typeof CreateAppSchema>>();
 
   const onSubmit = (data: z.infer<typeof CreateAppSchema>) => {
     createApp(data)
       .then(() => {
         toast.success("App added successfully!");
-        reset();
-        // TODO: make reset work properyly
+        form.reset();
         // TODO: maybe close dialog after success
       })
       .catch((e: { message: string }) => {
@@ -69,6 +68,7 @@ const AddAppButton = () => {
         </DialogHeader>
         <Form
           schema={CreateAppSchema}
+          form={form}
           onSubmit={onSubmit}
           props={{
             name: {
