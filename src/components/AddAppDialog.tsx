@@ -31,11 +31,7 @@ const CreateAppSchema = z.object({
 });
 
 const AddAppButton = () => {
-  const {
-    mutateAsync: createApp,
-    isLoading,
-    error,
-  } = api.apps.create.useMutation();
+  const { mutateAsync: createApp, isLoading } = api.apps.create.useMutation();
 
   const { reset } = useForm<z.infer<typeof CreateAppSchema>>();
 
@@ -47,7 +43,7 @@ const AddAppButton = () => {
         // TODO: make reset work properyly
         // TODO: maybe close dialog after success
       })
-      .catch((e) => {
+      .catch((e: { message: string }) => {
         toast.error(errorMessage(e.message));
       });
   };
