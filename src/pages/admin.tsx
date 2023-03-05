@@ -63,3 +63,6 @@ const AdminPage: NextPage = () => {
 };
 
 export default AdminPage;
+
+// TODO: add an edit functionality
+// TODO: add a DISMISS functionality
