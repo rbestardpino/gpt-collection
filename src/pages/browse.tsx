@@ -3,27 +3,31 @@ import Head from "next/head";
 import { useState } from "react";
 import AppLink from "~/components/AppLink";
 import Navbar from "~/components/Navbar";
+import StatsShowcase from "~/components/StatsShowcase";
 import { api } from "~/utils/api";
 
 const TABS = ["top", "new"] as const;
 type Tab = (typeof TABS)[number];
 
-const HomePage: NextPage = () => {
-  const [selectedTab, setSelectedTab] = useState<Tab>("top");
+const BrowsePage: NextPage = () => {
+  const [searchInput, setSearchInput] = useState("");
 
   const {
     data: apps,
     refetch,
     isLoading: isLoadingApps,
     error: errorApps,
-  } = api.apps.getFirstTen.useQuery({
-    orderBy: selectedTab === "top" ? "clicks" : "updatedAt",
-    // limit: 10, until we have pagination
+  } = api.apps.getApproved.useQuery({
+    // limit: 100, until we have pagination
+    search: searchInput,
   });
+
+  const { data: countApps } = api.apps.getAppStats.useQuery();
 
   if (errorApps) {
     return <div>ERROR: {errorApps.message}</div>;
   }
+
   return (
     <>
       <Head>
@@ -37,32 +41,32 @@ const HomePage: NextPage = () => {
         {/* HERO */}
         <div className="px-8 pt-5 text-center sm:px-16 sm:pt-10 md:px-32 lg:px-64">
           <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight md:text-5xl lg:text-7xl">
-            A comprehensive list of <span className="text-primary">AI </span>
-            powered apps
+            Browse all apps
           </h1>
-          <p className="text-l leading-7 sm:text-xl md:text-2xl [&:not(:first-child)]:mt-6">
-            Say no to spending hours of going through your liked tweets to find
-            that one app you wanted to try. Here you can find a curated list of
-            all the AI-driven apps that we&apos;ve found.
+          <p className="text-l mb-6 leading-7 sm:text-xl md:text-2xl [&:not(:first-child)]:mt-6">
+            Search within our collection to find the one you&apos;re looking
+            for.
           </p>
+          <StatsShowcase />
         </div>
 
         {/* APPS: TOP, NEW */}
-        <div className="px-4 sm:px-8 md:px-16">
-          <div className="tabs tabs-boxed mt-8 mb-4 w-fit justify-start">
-            {TABS.map((tab) => {
-              return (
-                <a
-                  className={`tab tab-lg ${
-                    selectedTab === tab ? "tab-active" : ""
-                  }`}
-                  onClick={() => setSelectedTab(tab)}
-                  key={tab}
-                >
-                  {tab.toUpperCase()}
-                </a>
-              );
-            })}
+        <div className="flex flex-col gap-6 px-4 sm:px-8 md:px-16">
+          <div className="form-control w-full">
+            <label className="label">
+              <span className="label-text">
+                Total apps: {countApps?.countTotalApps || "counting..."}
+              </span>
+            </label>
+            <input
+              value={searchInput} // conditional to prevent "uncontrolled to controlled" react warning
+              onChange={(e) => {
+                setSearchInput(e.target.value);
+              }}
+              type="text"
+              placeholder={"Search by name or description"}
+              className="input-bordered input w-full"
+            />
           </div>
           {isLoadingApps ? (
             <progress className="progress justify-center" />
@@ -96,4 +100,4 @@ const HomePage: NextPage = () => {
   );
 };
 
-export default HomePage;
+export default BrowsePage;

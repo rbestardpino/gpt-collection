@@ -1,6 +1,6 @@
 import { signIn } from "next-auth/react";
 
-const login = () => {
+const LoginPage = () => {
   return (
     <div className="h-max w-max">
       <button className="btn m-10" onClick={() => void signIn()}>
@@ -10,4 +10,4 @@ const login = () => {
   );
 };
 
-export default login;
+export default LoginPage;
