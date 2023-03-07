@@ -96,16 +96,15 @@ export const appsRouter = createTRPCRouter({
       return app;
     }),
 
-  exists: publicProcedure
+  dismiss: protectedProcedure
     .input(
       z.object({
-        url: z.string().url(),
+        id: z.string(),
       })
     )
-    .query(async ({ input, ctx }) => {
-      const app = await ctx.prisma.app.findUnique({
-        where: { url: input.url },
+    .mutation(({ input, ctx }) => {
+      return ctx.prisma.app.delete({
+        where: { id: input.id },
       });
-      return app !== null;
     }),
 });
