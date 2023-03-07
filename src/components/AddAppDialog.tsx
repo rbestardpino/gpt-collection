@@ -40,7 +40,7 @@ const AddAppButton = () => {
       .then(() => {
         toast.success("App added successfully!");
         form.reset();
-        // TODO: maybe close dialog after success
+        // TODO: maybe close dialog after success. https://www.radix-ui.com/docs/primitives/components/dialog#close-after-asynchronous-form-submission
       })
       .catch((e: { message: string }) => {
         toast.error(errorMessage(e.message));
