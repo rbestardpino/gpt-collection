@@ -1,7 +1,7 @@
-import { inferProcedureOutput } from "@trpc/server";
+import type { inferProcedureOutput } from "@trpc/server";
 import Link from "next/link";
 import toast from "react-hot-toast";
-import { AppRouter } from "~/server/api/root";
+import type { AppRouter } from "~/server/api/root";
 import { api } from "~/utils/api";
 
 interface Props {
@@ -18,6 +18,11 @@ const AppCard = ({ app, onSuccess, adminControls = false }: Props) => {
   return (
     <div className="card bg-base-300" key={app.id}>
       <div className="card-body">
+        {app.categories.map((c) => (
+          <div key={c.id} className="badge-primary badge-outline badge">
+            {c.name}
+          </div>
+        ))}
         <Link
           href={app.url + "?ref=https://gtpcollection.tech/"}
           className="link card-title"
@@ -33,8 +38,17 @@ const AppCard = ({ app, onSuccess, adminControls = false }: Props) => {
         >
           {app.name}
         </Link>
-        <p>{app.description}</p>
-        {adminControls ? (
+        <p>{app.title}</p>
+        <p className="text-sm italic">{app.description}</p>
+        {/* <div className="card-actions">
+          <div className="stats">
+            <div className="stat">
+              <div className="stat-title">Total Page Clicks</div>
+              <div className="stat-value text-primary">{app._count.clicks}</div>
+            </div>
+          </div>
+        </div> */}
+        {adminControls && (
           <div className="card-actions justify-end">
             <button
               className="btn-error btn"
@@ -80,17 +94,6 @@ const AppCard = ({ app, onSuccess, adminControls = false }: Props) => {
             >
               Approve
             </button>
-          </div>
-        ) : (
-          <div className="card-actions">
-            <div className="stats">
-              <div className="stat">
-                <div className="stat-title">Total Page Clicks</div>
-                <div className="stat-value text-primary">
-                  {app._count.clicks}
-                </div>
-              </div>
-            </div>
           </div>
         )}
       </div>

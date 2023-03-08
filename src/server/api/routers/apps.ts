@@ -11,17 +11,14 @@ export const appsRouter = createTRPCRouter({
     .input(
       z.object({
         name: z.string(),
+        title: z.string(),
         description: z.string(),
         url: z.string().url(),
       })
     )
     .mutation(async ({ input, ctx }) => {
       const app = await ctx.prisma.app.create({
-        data: {
-          name: input.name,
-          description: input.description,
-          url: input.url,
-        },
+        data: input,
       });
       return app.id;
     }),
@@ -37,6 +34,7 @@ export const appsRouter = createTRPCRouter({
             clicks: true,
           },
         },
+        categories: true,
       },
       orderBy: {
         updatedAt: "desc",
@@ -59,6 +57,7 @@ export const appsRouter = createTRPCRouter({
               clicks: true,
             },
           },
+          categories: true,
         },
         orderBy:
           input.orderBy === "clicks"
@@ -106,6 +105,7 @@ export const appsRouter = createTRPCRouter({
               clicks: true,
             },
           },
+          categories: true,
         },
         orderBy: {
           clicks: {
@@ -125,9 +125,7 @@ export const appsRouter = createTRPCRouter({
     )
     .mutation(async ({ input, ctx }) => {
       return await ctx.prisma.click.create({
-        data: {
-          appId: input.appId,
-        },
+        data: input,
       });
     }),
 
@@ -187,4 +185,17 @@ export const appsRouter = createTRPCRouter({
       countAppsAddedLastMonth,
     };
   }),
+
+  registerCategory: publicProcedure
+    .input(
+      z.object({
+        name: z.string(),
+      })
+    )
+    .mutation(async ({ input, ctx }) => {
+      const category = await ctx.prisma.category.create({
+        data: input,
+      });
+      return category;
+    }),
 });
