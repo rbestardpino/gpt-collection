@@ -32,7 +32,7 @@ const AdminPage: NextPage = () => {
       <Navbar />
       <div className="grid grid-cols-1 gap-4 p-8 sm:grid-cols-2 lg:grid-cols-3">
         {apps.map((app) => (
-          <AppCard app={app} key={app.id} onSuccess={refetch} />
+          <AppCard app={app} key={app.id} onSuccess={refetch} adminControls />
         ))}
       </div>
     </main>
