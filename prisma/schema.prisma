@@ -76,14 +76,16 @@ model VerificationToken {
 }
 
 model App {
-    id          String   @id @default(cuid())
+    id          String     @id @default(cuid())
     name        String
-    description String   @db.Text
-    url         String   @unique
+    title       String
+    description String     @db.Text
+    url         String     @unique
     clicks      Click[]
-    approved    Boolean  @default(false)
-    createdAt   DateTime @default(now())
-    updatedAt   DateTime @updatedAt
+    categories  Category[]
+    approved    Boolean    @default(false)
+    createdAt   DateTime   @default(now())
+    updatedAt   DateTime   @updatedAt
 }
 
 model Click {
@@ -93,4 +95,12 @@ model Click {
     createdAt DateTime @default(now())
 
     @@index([appId])
+}
+
+model Category {
+    id        String   @id @default(cuid())
+    name      String   @unique
+    apps      App[]
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
 }

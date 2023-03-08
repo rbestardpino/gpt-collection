@@ -1,7 +1,7 @@
 import CountUp from "react-countup";
 import { api } from "~/utils/api";
 
-const COUNT_UP = 100;
+const COUNT_UP = Math.floor(Math.random() * 1000);
 
 const StatsShowcase = () => {
   const { data: countClicks } = api.apps.getClickStats.useQuery();

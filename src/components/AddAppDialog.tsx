@@ -15,6 +15,7 @@ import Form from "./Form";
 
 const CreateAppSchema = z.object({
   name: z.string(),
+  title: z.string(),
   description: z.string(),
   url: z
     .string()
@@ -38,7 +39,7 @@ const AddAppButton = () => {
   const onSubmit = (data: z.infer<typeof CreateAppSchema>) => {
     createApp(data)
       .then(() => {
-        toast.success("App added successfully!");
+        toast.success("App added successfully! It will be reviewed soon.");
         form.reset();
         // TODO: maybe close dialog after success. https://www.radix-ui.com/docs/primitives/components/dialog#close-after-asynchronous-form-submission
       })
@@ -74,6 +75,10 @@ const AddAppButton = () => {
             name: {
               label: "Name",
               placeholder: "Name of the app",
+            },
+            title: {
+              label: "Title",
+              placeholder: "Title of the app",
             },
             description: {
               label: "Description",
