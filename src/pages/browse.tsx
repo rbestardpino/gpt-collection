@@ -6,9 +6,6 @@ import Navbar from "~/components/Navbar";
 import StatsShowcase from "~/components/StatsShowcase";
 import { api } from "~/utils/api";
 
-const TABS = ["top", "new"] as const;
-type Tab = (typeof TABS)[number];
-
 const BrowsePage: NextPage = () => {
   const [searchInput, setSearchInput] = useState("");
 

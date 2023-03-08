@@ -15,10 +15,6 @@ const AdminPage: NextPage = () => {
     enabled: sessionData?.user !== undefined,
   });
 
-  const { mutateAsync: approveApp } = api.apps.approve.useMutation();
-
-  const { mutateAsync: dismissApp } = api.apps.dismiss.useMutation();
-
   if (sessionData?.user?.role !== "ADMIN") {
     return <main>UNAUTHORIZED</main>;
   }

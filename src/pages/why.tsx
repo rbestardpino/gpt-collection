@@ -15,9 +15,9 @@ const WhyPage = () => {
           </h1>
           <p className="text-l mb-6 leading-7 sm:text-xl md:text-2xl [&:not(:first-child)]:mt-6">
             The sudden rise of the AI industry has led to a lot of hype and
-            excitement. And because of that and thanks to OpenAI's open models,
-            a new AI-powered app gets created every morning (maybe two). It is
-            hard to keep up with all of them, so I decided to create this
+            excitement. And because of that and thanks to OpenAI&apos;s open
+            models, a new AI-powered app gets created every morning (maybe two).
+            It is hard to keep up with all of them, so I decided to create this
             website to help you find the best ones.
           </p>
           <p className="text-l mb-6 leading-7 sm:text-xl md:text-2xl [&:not(:first-child)]:mt-6">
