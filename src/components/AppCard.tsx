@@ -1,7 +1,7 @@
-import { inferProcedureOutput } from "@trpc/server";
+import type { inferProcedureOutput } from "@trpc/server";
 import Link from "next/link";
 import toast from "react-hot-toast";
-import { AppRouter } from "~/server/api/root";
+import type { AppRouter } from "~/server/api/root";
 import { api } from "~/utils/api";
 
 interface Props {
@@ -18,8 +18,10 @@ const AppCard = ({ app, onSuccess, adminControls = false }: Props) => {
   return (
     <div className="card bg-base-300" key={app.id}>
       <div className="card-body">
-        {app.categories?.map((c) => (
-          <div className="badge-primary badge-outline badge">{c.name}</div>
+        {app.categories.map((c) => (
+          <div key={c.id} className="badge-primary badge-outline badge">
+            {c.name}
+          </div>
         ))}
         <Link
           href={app.url + "?ref=https://gtpcollection.tech/"}

@@ -34,6 +34,7 @@ export const appsRouter = createTRPCRouter({
             clicks: true,
           },
         },
+        categories: true,
       },
       orderBy: {
         updatedAt: "desc",
