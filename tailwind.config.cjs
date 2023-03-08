@@ -25,6 +25,9 @@ const config = {
     // @ts-ignore
     require("tailwindcss-animate"),
   ],
+  daisyui: {
+    themes: ["dark"],
+  },
 };
 
 module.exports = config;

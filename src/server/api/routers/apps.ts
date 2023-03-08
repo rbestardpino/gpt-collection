@@ -31,17 +31,23 @@ export const appsRouter = createTRPCRouter({
       where: {
         approved: false,
       },
+      include: {
+        _count: {
+          select: {
+            clicks: true,
+          },
+        },
+      },
       orderBy: {
         updatedAt: "desc",
       },
     });
   }),
 
-  getApproved: publicProcedure
+  getFirstTen: publicProcedure
     .input(
       z.object({
         orderBy: z.enum(["clicks", "updatedAt"]),
-        limit: z.number().optional(),
       })
     )
     .query(({ input, ctx }) => {
@@ -64,6 +70,49 @@ export const appsRouter = createTRPCRouter({
             : {
                 updatedAt: "desc",
               },
+        take: 10,
+      });
+    }),
+
+  getApproved: publicProcedure
+    .input(
+      z.object({
+        limit: z.number().optional(),
+        search: z.string().optional(),
+      })
+    )
+    .query(({ input, ctx }) => {
+      return ctx.prisma.app.findMany({
+        where: {
+          AND: {
+            approved: true,
+          },
+          OR: [
+            {
+              name: {
+                contains: input.search,
+              },
+            },
+            {
+              description: {
+                contains: input.search,
+              },
+            },
+          ],
+        },
+        include: {
+          _count: {
+            select: {
+              clicks: true,
+            },
+          },
+        },
+        orderBy: {
+          clicks: {
+            _count: "desc",
+          },
+        },
+
         take: input.limit,
       });
     }),
@@ -107,4 +156,35 @@ export const appsRouter = createTRPCRouter({
         where: { id: input.id },
       });
     }),
+
+  getClickStats: publicProcedure.query(async ({ ctx }) => {
+    const countTotalClicks = await ctx.prisma.click.count();
+    const countClicksLastMonth = await ctx.prisma.click.count({
+      where: {
+        createdAt: {
+          gte: new Date(new Date().setMonth(new Date().getMonth() - 1)),
+        },
+      },
+    });
+    return {
+      countTotalClicks,
+      countClicksLastMonth,
+    };
+  }),
+
+  getAppStats: publicProcedure.query(async ({ ctx }) => {
+    const countTotalApps = await ctx.prisma.app.count();
+    const countAppsAddedLastMonth = await ctx.prisma.app.count({
+      where: {
+        createdAt: {
+          gte: new Date(new Date().setMonth(new Date().getMonth() - 1)),
+        },
+      },
+    });
+
+    return {
+      countTotalApps,
+      countAppsAddedLastMonth,
+    };
+  }),
 });
