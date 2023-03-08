@@ -31,6 +31,13 @@ export const appsRouter = createTRPCRouter({
       where: {
         approved: false,
       },
+      include: {
+        _count: {
+          select: {
+            clicks: true,
+          },
+        },
+      },
       orderBy: {
         updatedAt: "desc",
       },

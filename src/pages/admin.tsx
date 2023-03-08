@@ -1,7 +1,6 @@
 import { type NextPage } from "next";
 import { useSession } from "next-auth/react";
-import { toast } from "react-hot-toast";
-import AppLink from "~/components/AppLink";
+import AppCard from "~/components/AppCard";
 import Navbar from "~/components/Navbar";
 import { api } from "~/utils/api";
 
@@ -32,62 +31,9 @@ const AdminPage: NextPage = () => {
     <main>
       <Navbar />
       <div className="grid grid-cols-1 gap-4 p-8 sm:grid-cols-2 lg:grid-cols-3">
-        {apps.map((app) => {
-          return (
-            <div className="card bg-base-300" key={app.id}>
-              <div className="card-body">
-                <AppLink app={app} />
-                <p>{app.description}</p>
-                <div className="card-actions justify-end">
-                  <button
-                    className="btn-error btn"
-                    type="button"
-                    onClick={() => {
-                      void toast
-                        .promise(
-                          dismissApp({
-                            id: app.id,
-                          }),
-                          {
-                            loading: `Dismissing "${app.name}"`,
-                            success: `Dismissed "${app.name}"`,
-                            error: `Error dismissing "${app.name}"`,
-                          }
-                        )
-                        .then(() => {
-                          void refetch();
-                        });
-                    }}
-                  >
-                    Dismiss
-                  </button>
-                  <button
-                    className="btn-primary btn"
-                    type="button"
-                    onClick={() => {
-                      void toast
-                        .promise(
-                          approveApp({
-                            id: app.id,
-                          }),
-                          {
-                            loading: `Approving "${app.name}"`,
-                            success: `Approved "${app.name}"`,
-                            error: `Error approving "${app.name}"`,
-                          }
-                        )
-                        .then(() => {
-                          void refetch();
-                        });
-                    }}
-                  >
-                    Approve
-                  </button>
-                </div>
-              </div>
-            </div>
-          );
-        })}
+        {apps.map((app) => (
+          <AppCard app={app} key={app.id} onSuccess={refetch} />
+        ))}
       </div>
     </main>
   );
